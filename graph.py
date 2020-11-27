@@ -100,7 +100,6 @@ def plot_graph(config):  # Построить граф для данной ко�
     # Создать и отрисовать граф
     fig = plt.figure()
     fig.canvas.set_window_title(f'Конфигурация - {config}')
-    # plt.title(f'Конфигурация - {config}')
     G = nx.Graph()
     G.add_nodes_from([vert.vertex for vert in vertices])
     G.add_edges_from(edges)
@@ -109,7 +108,7 @@ def plot_graph(config):  # Построить граф для данной ко�
     # Уменьшить граф, чтобы не срезались подписи
     axis = plt.gca()
     axis.set_xlim([1.1 * x for x in axis.get_xlim()])
-    axis.set_ylim([1.00 * y for y in axis.get_ylim()])
+    axis.set_ylim([1.0 * y for y in axis.get_ylim()])
 
     plt.show()
 

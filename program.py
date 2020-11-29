@@ -7,7 +7,7 @@ def probability_specific(j, m):  # Вероятность нахождения �
     def product(j):
         result = 1
         for i in range(0, N):
-            result *= ρ[i] ** j[i]
+            result *= ρ[i] ** j[i]  # ρ в положительной степени
         return result
 
     def recursive_sum(j, i=0):
@@ -44,14 +44,12 @@ def probability_general(l, m):  # Вероятность нахождения с
     return recursive_sum(j)
 
 
-def mean_queue_length(m):
+def mean_queue_length(m):  # Новая длина очереди
     result = 0
     l = 0
-
     for i in range(sum(m) - 1, 0, -1):
         result += probability_general(l, m) * i
         l += 1
-
     return result
 
 
@@ -94,10 +92,7 @@ def plot_graph_for(configuration, index, up_to):  # index — для проце�
     plt.plot(m_index_values, perf)
     plt.show()
 
-    # Вывод статистики
-    print('{:<4} {:<20} {:<24}'.format(f'm-{index}', 'Производительность', 'Ср. Длина очереди'))
-    for m_index_values, perf, queue in zip(m_index_values, perf, queue):
-        print('{:<4} {:<20} {:<24}'.format(m_index_values, perf, queue))
+    return [m_index_values, queue, perf]
 
 
 if __name__ == "__main__":
@@ -114,6 +109,13 @@ if __name__ == "__main__":
     μ = [1 / τ for τ in τ]  # Параметр обслуживания
     ρ = [ν / μ for ν, μ in zip(ν, μ)]
 
-    plot_graph_for(m, 0, 50)
+    stats = plot_graph_for(m, 0, 15)
+    # Вывод статистики
+    print(stats)
+    txt = ''
+    print('{:<4} {:<20} {:<24}'.format(f'№', 'Производительность', 'Ср. Длина очереди'))
+    for i, q, p in zip(stats[0], stats[1], stats[2]):
+        txt += ('{:<4} {:<20} {:<24}\n'.format(i, q, p))
+    print(txt)
 
     plt.show(block=True)

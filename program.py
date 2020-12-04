@@ -4,10 +4,12 @@ plt.ion()  # Включить интерактивный режим работы
 
 
 def probability_specific(j, m):  # Вероятность нахождения системы в состоянии j
+    N = len(m)
+
     def product(j):
         result = 1
         for i in range(0, N):
-            result *= ρ[i] ** j[i]  # ρ в положительной степени
+            result *= ρ[i] ** j[i]
         return result
 
     def recursive_sum(j, i=0):
@@ -25,6 +27,8 @@ def probability_specific(j, m):  # Вероятность нахождения �
 
 
 def probability_general(l, m):  # Вероятность нахождения системы при длине очереди l
+    N = len(m)
+
     def recursive_sum(j, i=0):
         result = 0
 
@@ -44,12 +48,10 @@ def probability_general(l, m):  # Вероятность нахождения с
     return recursive_sum(j)
 
 
-def mean_queue_length(m):  # Новая длина очереди
+def mean_queue_length(m):
     result = 0
-    l = 0
-    for i in range(sum(m) - 1, 0, -1):
+    for l, i in enumerate(range(sum(m) - 1, 0, -1)):
         result += probability_general(l, m) * i
-        l += 1
     return result
 
 
@@ -62,6 +64,7 @@ def relative_performance(m, i, mean_queue):  # Относительная про
 
 
 def general_performance(m, mean_queue):  # Общая производительность системы
+    N = len(m)
     result = 0
     for i in range(0, N):
         result += relative_performance(m, i, mean_queue)
@@ -88,7 +91,6 @@ def plot_graph_for(configuration, index, up_to):  # index — для проце�
     fig.canvas.set_window_title(f'Конфигурация - {m}')
     plt.xlabel(f'Количество процессоров m-{index + 1}')
     plt.ylabel('Производительность')
-
     plt.plot(m_index_values, perf)
     plt.show()
 
@@ -98,8 +100,6 @@ def plot_graph_for(configuration, index, up_to):  # index — для проце�
 if __name__ == "__main__":
     # Необходимо задать перед вычислениями  <--- ОБЯЗАТЕЛЬНО
     m = [5, 3]  # Количество процессоров каждого типа
-    N = len(m)  # Количество процессоров разных типов
-
     TO = [0.66, 8, 57]  # Время выполнения операций
     τ = [1.2, 1.2, 1.2]  # Время цикла оперативной памяти
     ξ = 0.35  # Коэффициент связности
@@ -111,9 +111,8 @@ if __name__ == "__main__":
 
     stats = plot_graph_for(m, 0, 15)
     # Вывод статистики
-    print(stats)
     txt = ''
-    print('{:<4} {:<20} {:<24}'.format(f'№', 'Производительность', 'Ср. Длина очереди'))
+    print('{:<4} {:<20} {:<24}'.format('№', 'Производительность', 'Ср. Длина очереди'))
     for i, q, p in zip(stats[0], stats[1], stats[2]):
         txt += ('{:<4} {:<20} {:<24}\n'.format(i, q, p))
     print(txt)

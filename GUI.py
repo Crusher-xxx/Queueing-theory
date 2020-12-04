@@ -7,10 +7,9 @@ def calculate():  # Выполнить необходимые расчеты и 
     # Задать конфигурацию на основе ввода пользователя
     m = [int(n) for n in configuration.field_input_configuration.get().split()]
     graph.Vertex.max_requests = m
-    graph.Vertex.number_of_processors = len(graph.Vertex.max_requests)
+    graph.Vertex.number_of_types = len(graph.Vertex.max_requests)
 
     # Основные параметры для расчета производительности
-    N = program.N = graph.Vertex.number_of_processors  # Количество процессоров разных типов
     TO = program.TO = [float(n) for n in configuration.field_TO.get().split()]  # Время выполнения операций
     τ = program.τ = [float(n) for n in configuration.field_τ.get().split()]  # Время цикла оперативной памяти
     ξ = program.ξ = float(configuration.field_ξ.get())  # Коэффициент связности
@@ -18,7 +17,7 @@ def calculate():  # Выполнить необходимые расчеты и 
     # Дополнительные параметры для расчета производительности (вычисляются из основных)
     ν = program.ν = [ξ / (TO + ξ * τ) for TO, τ in zip(TO, τ)]  # Параметр интенсивности
     μ = program.μ = [1 / τ for τ in τ]  # Параметр обслуживания
-    ρ = program.ρ = [ν / μ for ν, μ in zip(ν, μ)]
+    program.ρ = [ν / μ for ν, μ in zip(ν, μ)]
 
     # Построить граф
     graph.plot_graph(m)
